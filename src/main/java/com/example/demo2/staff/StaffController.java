@@ -50,7 +50,7 @@ public class StaffController {
 
         staff.setName(name);
         staff.setEmail(email);
-        staff.setProfileImage(fullFilePath); // 保存先のパスとファイル名を設定
+        staff.setProfileImage(fileName); // 保存先のパスとファイル名を設定
         repository.save(staff);
             
             return ResponseEntity.ok("登録が成功しました");
