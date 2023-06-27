@@ -25,4 +25,7 @@ public class Staff {
     @Column(name="email")
     private String email;
 
+    @Column(name="profileImage")
+    private String profileImage; // プロフィール画像のBase64データ
+
 }

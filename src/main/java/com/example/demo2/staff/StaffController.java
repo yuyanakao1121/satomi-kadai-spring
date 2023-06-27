@@ -1,6 +1,12 @@
 package com.example.demo2.staff;
 
+import java.io.FileOutputStream;
 import java.util.List;
+import java.util.UUID;
+
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.util.FileCopyUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +39,20 @@ public class StaffController {
         try {
             String name = staff.getName();
             String email = staff.getEmail();
-            staff.setName(name);
-            staff.setEmail(email);
-            repository.save(staff);
+            String profileImage = staff.getProfileImage(); // プロフィール画像のBase64データ
+
+        // Base64データをデコードして画像ファイルに保存
+        byte[] decodedImage = Base64.decodeBase64(profileImage);
+        String filePath = "/Users/nakaoyuya/road_to_geek/no-modules/vue-project/src/components/icons/";
+        String fileName = UUID.randomUUID().toString() + ".png";
+        String fullFilePath = filePath + fileName;
+        FileCopyUtils.copy(decodedImage, new FileOutputStream(fullFilePath));
+
+        staff.setName(name);
+        staff.setEmail(email);
+        staff.setProfileImage(fullFilePath); // 保存先のパスとファイル名を設定
+        repository.save(staff);
+            
             return ResponseEntity.ok("登録が成功しました");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("登録エラーが発生しました");
